@@ -9,6 +9,8 @@
   "author": "victor",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.16.2"
+    "express": "^4.16.2",
+    "filereader": "^0.10.3",
+    "shelljs": "^0.8.0"
   }
 }
