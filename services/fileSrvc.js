@@ -1,6 +1,7 @@
 var fs = require("fs");
 var configSrvc = require('./configSrvc');
 var config = configSrvc.getConfig();
+
 function ignore (dir) {
   for(index in config.ignorePaths) {
     if(dir.search(config.ignorePaths[index]) == 0)
@@ -9,7 +10,21 @@ function ignore (dir) {
   return false;
 }
 
+
 console.log("ignore: " + config.ignorePaths);
+
+function getFilesThatMatch (str) {
+  let files = getFiles('.');
+  let retFiles = [];
+  for (index in files) {
+      console.log(index + str.search(files[index].relname) + ") str: " + str + "search: " + files[index].relname)
+      if(str.search(files[index].relname) == 0) {
+        console.log("pushed!")
+        retFiles.push(files[index]);
+      }
+  }
+  return retFiles;
+}
 
 function getFileObj (fileName, allInfo) {
     function getObj(id, lastModifyDate) {
@@ -25,6 +40,8 @@ function getFileObj (fileName, allInfo) {
     stats = fs.statSync(fileName)
     fileObj.id = stats.ino;
     fileObj.lastModifyDate = stats.mtime;
+
+    console.log("stats: " + JSON.stringify(stats));
     if(allInfo) {
       const fd = fs.openSync(fileName, "r");
       var buffer = new Buffer(stats.size);
@@ -69,11 +86,22 @@ function getFiles(dir) {
           if(recRes)
             results = results.concat(getFiles(file))
         }
-        else results.push(getFileObj(file, true));
-    })
+
+        else {
+          let obj = getFileObj(file, true);
+          obj.relname = file;
+          results.push(obj);
+        }
+      })
     return results
   }
 }
 
+function save(filename, data) {
+  fs.writeFileSync(filename, data);
+}
+
+exports.getFilesThatMatch = getFilesThatMatch;
+exports.save = save;
 exports.getFiles = getFiles;
 exports.getDirectories = getDirectories;
