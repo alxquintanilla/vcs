@@ -1,7 +1,6 @@
 var express = require("express");
 var fs = require("fs");
 var shell = require('shelljs');
-var Regex = require('regex');
 var fileSrvc = require('./services/fileSrvc');
 
 

@@ -40,8 +40,24 @@ function getFileObj (fileName, allInfo) {
     return fileObj;
 }
 
+function getDirectories(dir) {
+  var results = []
+  var list = fs.readdirSync(dir);
+  list.forEach(function(file) {
+      file = dir + '/' + file
+      var stat = fs.statSync(file)
+      state.relname = file;
+      if (stat && stat.isDirectory()) {
+        recRes = getFiles(file);
+        results.push(getFileObj(file, true));
+        if(recRes)
+          results = results.concat(getFiles(file))
+      }
+  })
+  return results
+}
+
 function getFiles(dir) {
-//    console.log(ignore(dir) + ") dir: '" + dir + "'")
     if (!ignore(dir)) {
     var results = []
     var list = fs.readdirSync(dir)
@@ -60,3 +76,4 @@ function getFiles(dir) {
 }
 
 exports.getFiles = getFiles;
+exports.getDirectories = getDirectories;
