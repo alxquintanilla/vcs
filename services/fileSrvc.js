@@ -101,6 +101,13 @@ function save(filename, data) {
   fs.writeFileSync(filename, data);
 }
 
+function saveFiles(files, dir) {
+  for (index in files) {
+    const filename = dir + files[index].relname;
+    fs.writeFile(filename, files[index].content)
+  }
+}
+
 exports.getFilesThatMatch = getFilesThatMatch;
 exports.save = save;
 exports.getFiles = getFiles;
