@@ -21,7 +21,7 @@ let fileMap = {
 var shell = require('shelljs');
 var fileSrvc = require('./services/fileSrvc');
 
-exports.newProjects(name, files) {
+exports.newProject(name, files) {
   const dirs = fileSrvc.getDirectories("./projects");
   for (index in dirs) {
     const relname = dirs[index].relname;
@@ -32,10 +32,7 @@ exports.newProjects(name, files) {
   }
   shell.mkdir("projects/" + name);
 
-  for (index in files) {
-    const file = files[index];
-    fileSrvc.writeFile(file.fullName, file.content);
-  }
+
 }
 
 exports.update = function (updateObj) {
